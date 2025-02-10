@@ -1,5 +1,6 @@
 import time 
 import random
+import threading
 
 # Cyber pet class
 class CyberPet:
@@ -46,21 +47,34 @@ class CyberPet:
 def badStuff():
     while plop.getLife()==True:
         time.sleep(1)
-        if plop.getAgeSeconds()%10==0:
-            print("poo")
+        if plop.getAgeSeconds()%(random.randint(45,145))==0:
+            print("\nIv'e had a big stinky poo poo\n")
+            plop.setCleanliness(plop.getCleanliness()-1)
+            time.sleep(1)
+            print("\nCleanliness is now ", plop.getCleanliness(),"\n")
+            if plop.getCleanliness()==0:
+                print("\n\nI DIED IN MY OWN FILTH!!!\n")
+                plop.setLife(False)
+        
 # Main code area 
 # This is the area where we execute things
 
+#Create and initialise our cyberPet
 plop=CyberPet(5,5)
-plop.setHunger(plop.getHunger()-1)
 
-while True:
+#Start the timer thread which makes things happen in the background
+thread=threading.Thread(target=badStuff)
+thread.start()
+
+while plop.getLife()==True:
+
+
     #Menu
 
     print("1 for Status")
-    print("2 for Fitness")
-    print("3 for Cleanliness")
-    print("4 for Hunger")
+    print("2 to feed your pet")
+    print("3 take your pet for a walk")
+    print("4 to clean your pet's living area")
     
     #Input
     menuChoice=input(": ")
@@ -73,9 +87,13 @@ while True:
         time.sleep(1)
         print(" ")
     elif menuChoice=="2":
-        print("I am ", plop.getFitness(),"Fitness")
+        print("Here's some food for you..")
         time.sleep(1)
-        print(" ")
+        print("Nom Nom Nom")
+        time.sleep(1)
+        print("Nom, slurp, BURRRRP!\n\n")
+        plop.setHunger(plop.getHunger()+1)
+        time.sleep(1)
     elif menuChoice =="3":
         print("I am ", plop.getCleanliness(), "Cleanliness")
         time.sleep(1)
