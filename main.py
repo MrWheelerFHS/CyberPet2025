@@ -15,6 +15,11 @@ class CyberPet:
         self.__fitness=fitness
         self.__hunger=hunger
 
+        #Start the bringLife thread which makes things happen in the background
+        # Once this executes, the pet in now alive
+        thread=threading.Thread(target=self.bringLife)
+        thread.start()
+
     #Instance methods
     def getHunger(self):
         return self.__hunger
@@ -40,31 +45,37 @@ class CyberPet:
         return self.__cleanliness
     def setCleanliness(self, cleanliness):
         self.__cleanliness=cleanliness
-        
-        
-
-
-def badStuff():
-    while plop.getLife()==True:
-        time.sleep(1)
-        if plop.getAgeSeconds()%(random.randint(45,145))==0:
-            print("\nIv'e had a big stinky poo poo\n")
-            plop.setCleanliness(plop.getCleanliness()-1)
+    
+    def bringLife(self):
+        while self.getLife()==True:
             time.sleep(1)
-            print("\nCleanliness is now ", plop.getCleanliness(),"\n")
-            if plop.getCleanliness()==0:
-                print("\n\nI DIED IN MY OWN FILTH!!!\n")
-                plop.setLife(False)
+
+            #Poo part
+            if self.getAgeSeconds()%(random.randint(4,15))==0:
+                print("\nIv'e had a big stinky poo poo\n")
+                self.setCleanliness(self.getCleanliness()-1)
+                time.sleep(1)
+                print("\nCleanliness is now ", self.getCleanliness(),"\n")
+                if self.getCleanliness()==0:
+                    print("\n\nI DIED IN MY OWN FILTH!!!\n")
+                    self.setLife(False)
+            #hungry part
+            if self.getAgeSeconds()%(random.randint(4,15))==0:
+                print("\nMy belly is rumbling\n")
+                self.setHunger(self.getHunger()+1)
+                time.sleep(1)
+                print("\nHunger is now ", self.getHunger(),"\n")
+                if self.getHunger()>=10:
+                    print("\n\nI DIED OF STARVATION!!!\n")
+                    self.setLife(False)
+        
+        
         
 # Main code area 
 # This is the area where we execute things
 
 #Create and initialise our cyberPet
 plop=CyberPet(5,5)
-
-#Start the timer thread which makes things happen in the background
-thread=threading.Thread(target=badStuff)
-thread.start()
 
 while plop.getLife()==True:
 
@@ -99,7 +110,12 @@ while plop.getLife()==True:
         time.sleep(1)
         print(" ")
     elif menuChoice=="4":
-        print("I am ", plop.getHunger(), "hunger")
+        print("You enter with a shovel, bucket and mop")
+        print("You shovel a poo up and place it in the bin")
+        if plop.getCleanliness() >=8:
+            print("You get the mop out and finish cleaning the place up")
+        plop.setCleanliness(plop.getCleanliness()+1)
+        
         time.sleep(1)
         print(" ")
     else:
